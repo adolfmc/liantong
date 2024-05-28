@@ -1,0 +1,14 @@
+package com.baidu.p120ar.libloader;
+
+import com.baidu.p120ar.callback.ICallback;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+/* renamed from: com.baidu.ar.libloader.ILibLoaderPlugin */
+/* loaded from: E:\10201592_dexfile_execute.dex */
+public interface ILibLoaderPlugin {
+    void onBeforeLoad(ICallback iCallback);
+
+    boolean processLoadError(ICallback iCallback);
+}

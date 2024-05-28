@@ -1,0 +1,128 @@
+package android.support.v13.view.inputmethod;
+
+import android.content.ClipDescription;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputConnectionWrapper;
+import android.view.inputmethod.InputContentInfo;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+/* loaded from: E:\10201592_dexfile_execute.dex */
+public final class InputConnectionCompat {
+    private static final String COMMIT_CONTENT_ACTION = "android.support.v13.view.inputmethod.InputConnectionCompat.COMMIT_CONTENT";
+    private static final String COMMIT_CONTENT_CONTENT_URI_KEY = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_URI";
+    private static final String COMMIT_CONTENT_DESCRIPTION_KEY = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_DESCRIPTION";
+    private static final String COMMIT_CONTENT_FLAGS_KEY = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_FLAGS";
+    private static final String COMMIT_CONTENT_LINK_URI_KEY = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_LINK_URI";
+    private static final String COMMIT_CONTENT_OPTS_KEY = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_OPTS";
+    private static final String COMMIT_CONTENT_RESULT_RECEIVER = "android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_RESULT_RECEIVER";
+    public static final int INPUT_CONTENT_GRANT_READ_URI_PERMISSION = 1;
+
+    /* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+    /* loaded from: E:\10201592_dexfile_execute.dex */
+    public interface OnCommitContentListener {
+        boolean onCommitContent(InputContentInfoCompat inputContentInfoCompat, int i, Bundle bundle);
+    }
+
+    static boolean handlePerformPrivateCommand(@Nullable String str, @NonNull Bundle bundle, @NonNull OnCommitContentListener onCommitContentListener) {
+        ResultReceiver resultReceiver;
+        if (TextUtils.equals("android.support.v13.view.inputmethod.InputConnectionCompat.COMMIT_CONTENT", str) && bundle != null) {
+            try {
+                resultReceiver = (ResultReceiver) bundle.getParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_RESULT_RECEIVER");
+            } catch (Throwable th) {
+                th = th;
+                resultReceiver = null;
+            }
+            try {
+                boolean onCommitContent = onCommitContentListener.onCommitContent(new InputContentInfoCompat((Uri) bundle.getParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_URI"), (ClipDescription) bundle.getParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_DESCRIPTION"), (Uri) bundle.getParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_LINK_URI")), bundle.getInt("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_FLAGS"), (Bundle) bundle.getParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_OPTS"));
+                if (resultReceiver != null) {
+                    resultReceiver.send(onCommitContent ? 1 : 0, null);
+                }
+                return onCommitContent;
+            } catch (Throwable th2) {
+                th = th2;
+                if (resultReceiver != null) {
+                    resultReceiver.send(0, null);
+                }
+                throw th;
+            }
+        }
+        return false;
+    }
+
+    public static boolean commitContent(@NonNull InputConnection inputConnection, @NonNull EditorInfo editorInfo, @NonNull InputContentInfoCompat inputContentInfoCompat, int i, @Nullable Bundle bundle) {
+        boolean z;
+        ClipDescription description = inputContentInfoCompat.getDescription();
+        String[] contentMimeTypes = EditorInfoCompat.getContentMimeTypes(editorInfo);
+        int length = contentMimeTypes.length;
+        int i2 = 0;
+        while (true) {
+            if (i2 >= length) {
+                z = false;
+                break;
+            } else if (description.hasMimeType(contentMimeTypes[i2])) {
+                z = true;
+                break;
+            } else {
+                i2++;
+            }
+        }
+        if (z) {
+            if (Build.VERSION.SDK_INT >= 25) {
+                return inputConnection.commitContent((InputContentInfo) inputContentInfoCompat.unwrap(), i, bundle);
+            }
+            Bundle bundle2 = new Bundle();
+            bundle2.putParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_URI", inputContentInfoCompat.getContentUri());
+            bundle2.putParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_DESCRIPTION", inputContentInfoCompat.getDescription());
+            bundle2.putParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_LINK_URI", inputContentInfoCompat.getLinkUri());
+            bundle2.putInt("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_FLAGS", i);
+            bundle2.putParcelable("android.support.v13.view.inputmethod.InputConnectionCompat.CONTENT_OPTS", bundle);
+            return inputConnection.performPrivateCommand("android.support.v13.view.inputmethod.InputConnectionCompat.COMMIT_CONTENT", bundle2);
+        }
+        return false;
+    }
+
+    @NonNull
+    public static InputConnection createWrapper(@NonNull InputConnection inputConnection, @NonNull EditorInfo editorInfo, @NonNull final OnCommitContentListener onCommitContentListener) {
+        if (inputConnection != null) {
+            if (editorInfo != null) {
+                if (onCommitContentListener == null) {
+                    throw new IllegalArgumentException("onCommitContentListener must be non-null");
+                }
+                if (Build.VERSION.SDK_INT >= 25) {
+                    return new InputConnectionWrapper(inputConnection, false) { // from class: android.support.v13.view.inputmethod.InputConnectionCompat.1
+                        @Override // android.view.inputmethod.InputConnectionWrapper, android.view.inputmethod.InputConnection
+                        public boolean commitContent(InputContentInfo inputContentInfo, int i, Bundle bundle) {
+                            if (onCommitContentListener.onCommitContent(InputContentInfoCompat.wrap(inputContentInfo), i, bundle)) {
+                                return true;
+                            }
+                            return super.commitContent(inputContentInfo, i, bundle);
+                        }
+                    };
+                }
+                return EditorInfoCompat.getContentMimeTypes(editorInfo).length == 0 ? inputConnection : new InputConnectionWrapper(inputConnection, false) { // from class: android.support.v13.view.inputmethod.InputConnectionCompat.2
+                    @Override // android.view.inputmethod.InputConnectionWrapper, android.view.inputmethod.InputConnection
+                    public boolean performPrivateCommand(String str, Bundle bundle) {
+                        if (InputConnectionCompat.handlePerformPrivateCommand(str, bundle, onCommitContentListener)) {
+                            return true;
+                        }
+                        return super.performPrivateCommand(str, bundle);
+                    }
+                };
+            }
+            throw new IllegalArgumentException("editorInfo must be non-null");
+        }
+        throw new IllegalArgumentException("inputConnection must be non-null");
+    }
+}

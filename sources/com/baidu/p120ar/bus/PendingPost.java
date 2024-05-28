@@ -1,0 +1,48 @@
+package com.baidu.p120ar.bus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+/* renamed from: com.baidu.ar.bus.PendingPost */
+/* loaded from: E:\10201592_dexfile_execute.dex */
+final class PendingPost {
+    private static final List<PendingPost> pendingPostPool = new ArrayList();
+    Object event;
+    PendingPost next;
+    Subscription subscription;
+
+    private PendingPost(Object obj, Subscription subscription) {
+        this.event = obj;
+        this.subscription = subscription;
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static PendingPost obtainPendingPost(Subscription subscription, Object obj) {
+        synchronized (pendingPostPool) {
+            int size = pendingPostPool.size();
+            if (size > 0) {
+                PendingPost remove = pendingPostPool.remove(size - 1);
+                remove.event = obj;
+                remove.subscription = subscription;
+                remove.next = null;
+                return remove;
+            }
+            return new PendingPost(obj, subscription);
+        }
+    }
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static void releasePendingPost(PendingPost pendingPost) {
+        pendingPost.event = null;
+        pendingPost.subscription = null;
+        pendingPost.next = null;
+        synchronized (pendingPostPool) {
+            if (pendingPostPool.size() < 20) {
+                pendingPostPool.add(pendingPost);
+            }
+        }
+    }
+}

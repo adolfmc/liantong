@@ -1,0 +1,129 @@
+package p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.p028w2;
+
+import java.math.BigInteger;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.AbstractC0174m;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.AbstractC0258r;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.AbstractC0263s;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.AbstractC0494y;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0128b;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0140e;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0151g1;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0166k;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0184o1;
+import p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.C0372w0;
+
+/* renamed from: a.a.a.a.a.e.a.b.w2.j */
+/* loaded from: E:\10201592_dexfile_execute.dex.fixout.dex */
+public class C0401j extends AbstractC0174m {
+
+    /* renamed from: v3 */
+    public C0128b f1114v3;
+
+    /* renamed from: w3 */
+    public C0166k f1115w3;
+
+    public C0401j(AbstractC0263s abstractC0263s) {
+        this.f1114v3 = C0372w0.m23486a(false);
+        this.f1115w3 = null;
+        if (abstractC0263s.mo23745o() == 0) {
+            this.f1114v3 = null;
+            this.f1115w3 = null;
+            return;
+        }
+        if (abstractC0263s.mo23751a(0) instanceof C0372w0) {
+            this.f1114v3 = C0372w0.m23487a(abstractC0263s.mo23751a(0));
+        } else {
+            this.f1114v3 = null;
+            this.f1115w3 = C0151g1.m24147a(abstractC0263s.mo23751a(0));
+        }
+        if (abstractC0263s.mo23745o() > 1) {
+            if (this.f1114v3 != null) {
+                this.f1115w3 = C0151g1.m24147a(abstractC0263s.mo23751a(1));
+                return;
+            }
+            throw new IllegalArgumentException("wrong sequence in constructor");
+        }
+    }
+
+    /* renamed from: a */
+    public static C0401j m23324a(AbstractC0494y abstractC0494y, boolean z) {
+        return m23323a(AbstractC0263s.m23750a(abstractC0494y, z));
+    }
+
+    @Override // p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.AbstractC0174m, p001a.p002a.p003a.p004a.p005a.p014e.p015a.p016b.InterfaceC0136d
+    /* renamed from: d */
+    public AbstractC0258r mo23015d() {
+        C0140e c0140e = new C0140e();
+        C0128b c0128b = this.f1114v3;
+        if (c0128b != null) {
+            c0140e.m24170a(c0128b);
+        }
+        C0166k c0166k = this.f1115w3;
+        if (c0166k != null) {
+            c0140e.m24170a(c0166k);
+        }
+        return new C0184o1(c0140e);
+    }
+
+    /* renamed from: i */
+    public BigInteger m23322i() {
+        C0166k c0166k = this.f1115w3;
+        if (c0166k != null) {
+            return c0166k.m24145n();
+        }
+        return null;
+    }
+
+    /* renamed from: j */
+    public boolean m23321j() {
+        C0128b c0128b = this.f1114v3;
+        return c0128b != null && c0128b.m23484m();
+    }
+
+    public String toString() {
+        if (this.f1115w3 == null) {
+            if (this.f1114v3 == null) {
+                return "BasicConstraints: isCa(false)";
+            }
+            return "BasicConstraints: isCa(" + m23321j() + ")";
+        }
+        return "BasicConstraints: isCa(" + m23321j() + "), pathLenConstraint = " + this.f1115w3.m24145n();
+    }
+
+    /* renamed from: a */
+    public static C0401j m23323a(Object obj) {
+        if (obj instanceof C0401j) {
+            return (C0401j) obj;
+        }
+        if (obj instanceof C0421p1) {
+            return m23323a(C0421p1.m23210a((C0421p1) obj));
+        }
+        if (obj != null) {
+            return new C0401j(AbstractC0263s.m23749a(obj));
+        }
+        return null;
+    }
+
+    /* renamed from: a */
+    public static C0401j m23325a(C0446z c0446z) {
+        return m23323a(c0446z.m23090b(C0444y.f1439E3));
+    }
+
+    public C0401j(boolean z) {
+        this.f1114v3 = C0372w0.m23486a(false);
+        this.f1115w3 = null;
+        if (z) {
+            this.f1114v3 = C0372w0.m23486a(true);
+        } else {
+            this.f1114v3 = null;
+        }
+        this.f1115w3 = null;
+    }
+
+    public C0401j(int i) {
+        this.f1114v3 = C0372w0.m23486a(false);
+        this.f1115w3 = null;
+        this.f1114v3 = C0372w0.m23486a(true);
+        this.f1115w3 = new C0166k(i);
+    }
+}

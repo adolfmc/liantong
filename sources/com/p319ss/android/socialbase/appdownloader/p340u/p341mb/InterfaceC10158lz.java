@@ -1,0 +1,9 @@
+package com.p319ss.android.socialbase.appdownloader.p340u.p341mb;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\567196_dexfile_execute.dex.fixout.dex
+ */
+/* renamed from: com.ss.android.socialbase.appdownloader.u.mb.lz */
+/* loaded from: E:\567196_dexfile_execute.dex */
+public interface InterfaceC10158lz extends InterfaceC10157ko {
+}

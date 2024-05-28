@@ -1,0 +1,82 @@
+package android.support.p083v4.app;
+
+import android.app.Notification;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Build;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.support.p083v4.app.INotificationSideChannel;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+/* renamed from: android.support.v4.app.NotificationCompatSideChannelService */
+/* loaded from: E:\10201592_dexfile_execute.dex */
+public abstract class NotificationCompatSideChannelService extends Service {
+    public abstract void cancel(String str, int i, String str2);
+
+    public abstract void cancelAll(String str);
+
+    public abstract void notify(String str, int i, String str2, Notification notification);
+
+    @Override // android.app.Service
+    public IBinder onBind(Intent intent) {
+        if (!intent.getAction().equals("android.support.BIND_NOTIFICATION_SIDE_CHANNEL") || Build.VERSION.SDK_INT > 19) {
+            return null;
+        }
+        return new NotificationSideChannelStub();
+    }
+
+    /* JADX WARN: Classes with same name are omitted:
+  E:\10201592_dexfile_execute.dex.fixout.dex
+ */
+    /* renamed from: android.support.v4.app.NotificationCompatSideChannelService$NotificationSideChannelStub */
+    /* loaded from: E:\10201592_dexfile_execute.dex */
+    class NotificationSideChannelStub extends INotificationSideChannel.Stub {
+        NotificationSideChannelStub() {
+        }
+
+        @Override // android.support.p083v4.app.INotificationSideChannel
+        public void notify(String str, int i, String str2, Notification notification) throws RemoteException {
+            NotificationCompatSideChannelService.this.checkPermission(getCallingUid(), str);
+            long clearCallingIdentity = clearCallingIdentity();
+            try {
+                NotificationCompatSideChannelService.this.notify(str, i, str2, notification);
+            } finally {
+                restoreCallingIdentity(clearCallingIdentity);
+            }
+        }
+
+        @Override // android.support.p083v4.app.INotificationSideChannel
+        public void cancel(String str, int i, String str2) throws RemoteException {
+            NotificationCompatSideChannelService.this.checkPermission(getCallingUid(), str);
+            long clearCallingIdentity = clearCallingIdentity();
+            try {
+                NotificationCompatSideChannelService.this.cancel(str, i, str2);
+            } finally {
+                restoreCallingIdentity(clearCallingIdentity);
+            }
+        }
+
+        @Override // android.support.p083v4.app.INotificationSideChannel
+        public void cancelAll(String str) {
+            NotificationCompatSideChannelService.this.checkPermission(getCallingUid(), str);
+            long clearCallingIdentity = clearCallingIdentity();
+            try {
+                NotificationCompatSideChannelService.this.cancelAll(str);
+            } finally {
+                restoreCallingIdentity(clearCallingIdentity);
+            }
+        }
+    }
+
+    void checkPermission(int i, String str) {
+        for (String str2 : getPackageManager().getPackagesForUid(i)) {
+            if (str2.equals(str)) {
+                return;
+            }
+        }
+        throw new SecurityException("NotificationSideChannelService: Uid " + i + " is not authorized for package " + str);
+    }
+}

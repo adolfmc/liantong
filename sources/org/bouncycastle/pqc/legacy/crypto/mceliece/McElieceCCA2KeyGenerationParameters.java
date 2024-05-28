@@ -1,0 +1,21 @@
+package org.bouncycastle.pqc.legacy.crypto.mceliece;
+
+import java.security.SecureRandom;
+import org.bouncycastle.crypto.KeyGenerationParameters;
+
+/* JADX WARN: Classes with same name are omitted:
+  E:\9227576_dexfile_execute.dex.fixout.dex
+ */
+/* loaded from: E:\9227576_dexfile_execute.dex */
+public class McElieceCCA2KeyGenerationParameters extends KeyGenerationParameters {
+    private McElieceCCA2Parameters params;
+
+    public McElieceCCA2KeyGenerationParameters(SecureRandom secureRandom, McElieceCCA2Parameters mcElieceCCA2Parameters) {
+        super(secureRandom, 128);
+        this.params = mcElieceCCA2Parameters;
+    }
+
+    public McElieceCCA2Parameters getParameters() {
+        return this.params;
+    }
+}
